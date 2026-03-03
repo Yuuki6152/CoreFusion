@@ -16,6 +16,8 @@ export default defineConfig({
                 main: path.resolve(__dirname, 'src/main.tsx'), // エントリーポイント
                 //別のReactアプリやコンポーネントがある場合、ここに追加できる
                 //otherApp: path.resolve(__dirname, 'src/OtherApp/main.tsx'),
+                product: path.resolve(__dirname, 'src/product-detail.tsx'),
+                profile: path.resolve(__dirname,'src/user-profile.tsx'),
             },
             output: {
                 entryFileNames: '[name].js', // エントリーポイントのファイル名を main.js とする

@@ -14,6 +14,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); //静的ファイルを提供するためのミドルウェア
 app.UseRouting();
 
 app.UseAuthorization();

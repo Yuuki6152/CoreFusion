@@ -1,5 +1,27 @@
 ﻿@{
+
     ViewData["Title"] = "Home Page";
+
+    //ASP.NET Core MVCのModelから取得したデータを準備
+    var product = new { Id = 1, Name = "すごいウィジェット", Price = 10.11 };
+    var productJson = System.Text.Json.JsonSerializer.Serialize(product);
+
+    var currentUser = new { Id = "user123", Name = "田中 太郎", IsAdmin = true };
+    var currentUserJson = System.Text.Json.JsonSerializer.Serialize(currentUser);
+
 }
 
+<script>
+    window.APP_INITIAL_DATA = @Html.Raw(currentUserJson);
+</script>
+
 <div id="root"></div>
+
+<h2>商品詳細</h2>
+<div id="product-detail-root" data-product="@productJson"></div>
+
+<div id="user-profile-root"></div>
+
+<script type="module" src="~/js/react/main.js"></script>
+<script type="module" src="~/js/react/product.js"></script>
+<script type="module" src="~/js/react/profile.js"></script>
