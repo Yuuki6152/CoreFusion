@@ -4,6 +4,15 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
+    server: {
+        proxy: {
+            "api": {
+                target: "https://localhost:5137",
+                changeOrigin: true,
+                secure: false,
+            }
+        }
+    },
     root: 'src', // ソースコードのルートをsrcに設定
     //ビルド成果物の参照先の基準URL
     base: '/js/react/',
@@ -17,7 +26,8 @@ export default defineConfig({
                 //別のReactアプリやコンポーネントがある場合、ここに追加できる
                 //otherApp: path.resolve(__dirname, 'src/OtherApp/main.tsx'),
                 product: path.resolve(__dirname, 'src/product-detail.tsx'),
-                profile: path.resolve(__dirname,'src/user-profile.tsx'),
+                profile: path.resolve(__dirname, 'src/user-profile.tsx'),
+                todoApp: path.resolve(__dirname, 'src/todoList.tsx'),
             },
             output: {
                 entryFileNames: '[name].js', // エントリーポイントのファイル名を main.js とする

@@ -11,4 +11,12 @@
     <Content Include="ClientApp\src\index.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\Components\" />
+  </ItemGroup>
+
 </Project>

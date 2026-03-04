@@ -4,7 +4,9 @@ interface ProductProps {
     id: number;
     name: string;
     price: number;
-}const ProductDetail: React.FC<ProductProps> = ({ id, name, price }) => {
+}
+
+export const ProductDetail: React.FC<ProductProps> = ({ id, name, price }) => {
     return (
         <div>
             <h3>{name}</h3>
