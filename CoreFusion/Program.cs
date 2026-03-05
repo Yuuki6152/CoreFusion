@@ -23,11 +23,14 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
  * AddDefaultTokenProvidesはパスワードリセットトークンなどを生成するためのプロバイダを登録
  */
 builder.Services.AddDefaultIdentity<ApplicationUser>(option =>
-    option.SignIn.RequireConfirmedAccount = true)   //カスタムユーザを使用
+    option.SignIn.RequireConfirmedAccount = false)   //カスタムユーザを使用
         .AddEntityFrameworkStores<ApplicationDbContext>();  //IdentiryUserを使用する場合
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages();
+
 builder.Services.AddControllers(); //MVCとAPIコントローラーの両方を有効にする
 //Learn more aboud configuring Swagger/OpenAPI at https://aka.ms.aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -45,10 +48,23 @@ builder.Services.AddCors(option =>
         });
 });
 
+builder.Services.AddAuthorization(option =>
+{
+    option.AddPolicy("MustBeAdmin", policy =>
+            policy.RequireRole("Administrator"));   //ロールベースをポリシーで定義
+
+    option.AddPolicy("MustHaveTwoFactorEnabled", policy =>
+            policy.RequireClaim("amr", "mfa"));      //特定のクレームを持つか
+
+    option.AddPolicy("MinimumOrderAge", policy =>
+            policy.RequireClaim("MinimumOrderAge", "18"));  //カスタムクレームを持つか
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
     app.UseSwagger();
@@ -64,14 +80,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles(); //静的ファイルを提供するためのミドルウェア
 app.UseRouting();
 
-//認証ミドルウェアを認可ミドルウェアの前に配置することが重要
-app.UseAuthentication();    //認証ミドルウェア
-app.UseAuthorization();     //認可ミドルウェア
-
-
 //CORSミドルウェアをルーティングの前に配置する
 app.UseCors();
 
+//認証ミドルウェアを認可ミドルウェアの前に配置することが重要
+app.UseAuthentication();    //認証ミドルウェア
+app.UseAuthorization();     //認可ミドルウェア
 
 app.MapStaticAssets();
 
@@ -82,5 +96,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages();
 
 app.Run();
